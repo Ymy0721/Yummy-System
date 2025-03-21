@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yummy.patentSys.mapper.PatentUsersMapper">
+
+    <resultMap type="PatentUsers" id="PatentUsersResult">
+        <result property="userId"    column="user_id"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="usertype"    column="usertype"    />
+    </resultMap>
+
+    <sql id="selectPatentUsersVo">
+        select user_id, username, password, usertype from patent_users
+    </sql>
+
+    <select id="selectPatentUsersList" parameterType="PatentUsers" resultMap="PatentUsersResult">
+        <include refid="selectPatentUsersVo"/>
+        <where>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="usertype != null  and usertype != ''"> and usertype = #{usertype}</if>
+        </where>
+    </select>
+
+    <select id="selectPatentUsersByUserId" parameterType="Long" resultMap="PatentUsersResult">
+        <include refid="selectPatentUsersVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertPatentUsers" parameterType="PatentUsers" useGeneratedKeys="true" keyProperty="userId">
+        insert into patent_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="usertype != null and usertype != ''">usertype,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="usertype != null and usertype != ''">#{usertype},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePatentUsers" parameterType="PatentUsers">
+        update patent_users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="usertype != null and usertype != ''">usertype = #{usertype},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deletePatentUsersByUserId" parameterType="Long">
+        delete from patent_users where user_id = #{userId}
+    </delete>
+
+    <delete id="deletePatentUsersByUserIds" parameterType="String">
+        delete from patent_users where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yummy.patentSys.mapper.PatentsMapper">
+
+    <resultMap type="Patents" id="PatentsResult">
+        <result property="ApplicationNumber"    column="ApplicationNumber"    />
+        <result property="PublicationNumber"    column="PublicationNumber"    />
+        <result property="ApplicationDate"    column="ApplicationDate"    />
+        <result property="PublicationDate"    column="PublicationDate"    />
+        <result property="IPCClassification"    column="IPCClassification"    />
+        <result property="Applicant"    column="Applicant"    />
+        <result property="Inventor"    column="Inventor"    />
+        <result property="InventionName"    column="InventionName"    />
+        <result property="ApplicantPostalCode"    column="ApplicantPostalCode"    />
+        <result property="Agent"    column="Agent"    />
+        <result property="Agency"    column="Agency"    />
+        <result property="DocumentType"    column="DocumentType"    />
+        <result property="ApplicantCountry"    column="ApplicantCountry"    />
+        <result property="Abstract"    column="Abstract"    />
+        <result property="patentId"    column="patent_id"    />
+    </resultMap>
+
+    <sql id="selectPatentsVo">
+        select ApplicationNumber, PublicationNumber, ApplicationDate, PublicationDate, IPCClassification, Applicant, Inventor, InventionName, ApplicantPostalCode, Agent, Agency, DocumentType, ApplicantCountry, Abstract, patent_id from patents
+    </sql>
+
+    <select id="selectPatentsList" parameterType="Patents" resultMap="PatentsResult">
+        <include refid="selectPatentsVo"/>
+        <where>
+            <if test="ApplicationNumber != null  and ApplicationNumber != ''"> and ApplicationNumber like concat('%', #{ApplicationNumber}, '%')</if>
+            <if test="PublicationNumber != null  and PublicationNumber != ''"> and PublicationNumber like concat('%', #{PublicationNumber}, '%')</if>
+            <if test="ApplicationDate != null "> and ApplicationDate = #{ApplicationDate}</if>
+            <if test="PublicationDate != null "> and PublicationDate = #{PublicationDate}</if>
+            <if test="IPCClassification != null  and IPCClassification != ''"> and IPCClassification like concat('%', #{IPCClassification}, '%')</if>
+            <if test="Applicant != null  and Applicant != ''"> and Applicant like concat('%', #{Applicant}, '%')</if>
+            <if test="Inventor != null  and Inventor != ''"> and Inventor like concat('%', #{Inventor}, '%')</if>
+            <if test="InventionName != null  and InventionName != ''"> and InventionName like concat('%', #{InventionName}, '%')</if>
+            <if test="ApplicantPostalCode != null  and ApplicantPostalCode != ''"> and ApplicantPostalCode like concat('%', #{ApplicantPostalCode}, '%')</if>
+            <if test="Agent != null  and Agent != ''"> and Agent like concat('%', #{Agent}, '%')</if>
+            <if test="Agency != null  and Agency != ''"> and Agency like concat('%', #{Agency}, '%')</if>
+            <if test="DocumentType != null  and DocumentType != ''"> and DocumentType = #{DocumentType}</if>
+            <if test="ApplicantCountry != null  and ApplicantCountry != ''"> and ApplicantCountry = #{ApplicantCountry}</if>
+            <if test="Abstract != null  and Abstract != ''"> and Abstract like concat('%', #{Abstract}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectPatentsByPatentId" parameterType="Long" resultMap="PatentsResult">
+        <include refid="selectPatentsVo"/>
+        where patent_id = #{patentId}
+    </select>
+
+    <select id="getPatentCountByTime" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select date_format(publicationdate, '%Y-%m') as name, count(*) as value
+        from patents
+        group by date_format(publicationdate, '%Y-%m')
+        order by name;
+    </select>
+
+    <select id="getPatentCountByRegion" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select pcm.province as name, count(*) as value
+        from patents p
+            join postal_code_mapping pcm
+        on left(p.ApplicantPostalCode, 4) = pcm.postal_code_prefix
+        where p.ApplicantCountry = 'CN'
+        group by name
+        order by value desc;
+    </select>
+
+    <select id="getPatentCountByAgency" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select Agency as name, count(*) as value
+        from patents
+        where Agency != ''
+        group by name
+        order by value desc;
+    </select>
+
+    <select id="getPatentCountByApplicant" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select Applicant as name, count(*) as value
+        from patents
+        where Applicant != ''
+        group by name
+        order by value desc;
+    </select>
+
+    <select id="getPatentCountByInventor" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select Inventor as name, count(*) as value
+        from patents
+        where Inventor not in ('', '不公告发明人', '请求不公布姓名')
+        group by name
+        order by value desc;
+    </select>
+
+    <select id="getPatentCountByType" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select year(PublicationDate) as name, DocumentType as type, count(*) as value
+        from patents
+        where year(PublicationDate) >= 2010
+        group by type, name
+        order by type, name;
+    </select>
+
+    <select id="getPatentTitleWordCount" resultType="com.yummy.patentSys.stat.BusinessStat">
+        select word as name, frequency as value
+        from word_frequency
+        where type = 'InventionName'
+        group by  name, value
+        order by value desc;
+    </select>
+
+
+    <select id="getEntitiesWithRelationship" resultType="com.yummy.patentSys.stat.EntityRelationship">
+        SELECT e1.name AS entity1, e1.type AS entity1Type, r.relation, e2.name AS entity2, e2.type AS entity2Type,
+               (SELECT COUNT(*) FROM relations WHERE from_id = e1.entity_id) AS degree
+        FROM entities e1
+                 JOIN relations r ON e1.entity_id = r.from_id
+                 JOIN entities e2 ON r.to_id = e2.entity_id
+        WHERE e1.entity_id IN (
+            SELECT from_id
+            FROM relations
+            GROUP BY from_id
+            HAVING COUNT(relation_id) BETWEEN 10 AND 20
+            ORDER BY COUNT(relation_id) DESC
+        );
+    </select>
+
+    <insert id="insertPatents" parameterType="Patents" useGeneratedKeys="true" keyProperty="patentId">
+        insert into patents
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ApplicationNumber != null and ApplicationNumber != ''">ApplicationNumber,</if>
+            <if test="PublicationNumber != null and PublicationNumber != ''">PublicationNumber,</if>
+            <if test="ApplicationDate != null">ApplicationDate,</if>
+            <if test="PublicationDate != null">PublicationDate,</if>
+            <if test="IPCClassification != null">IPCClassification,</if>
+            <if test="Applicant != null">Applicant,</if>
+            <if test="Inventor != null">Inventor,</if>
+            <if test="InventionName != null">InventionName,</if>
+            <if test="ApplicantPostalCode != null">ApplicantPostalCode,</if>
+            <if test="Agent != null">Agent,</if>
+            <if test="Agency != null">Agency,</if>
+            <if test="DocumentType != null">DocumentType,</if>
+            <if test="ApplicantCountry != null">ApplicantCountry,</if>
+            <if test="Abstract != null">Abstract,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ApplicationNumber != null and ApplicationNumber != ''">#{ApplicationNumber},</if>
+            <if test="PublicationNumber != null and PublicationNumber != ''">#{PublicationNumber},</if>
+            <if test="ApplicationDate != null">#{ApplicationDate},</if>
+            <if test="PublicationDate != null">#{PublicationDate},</if>
+            <if test="IPCClassification != null">#{IPCClassification},</if>
+            <if test="Applicant != null">#{Applicant},</if>
+            <if test="Inventor != null">#{Inventor},</if>
+            <if test="InventionName != null">#{InventionName},</if>
+            <if test="ApplicantPostalCode != null">#{ApplicantPostalCode},</if>
+            <if test="Agent != null">#{Agent},</if>
+            <if test="Agency != null">#{Agency},</if>
+            <if test="DocumentType != null">#{DocumentType},</if>
+            <if test="ApplicantCountry != null">#{ApplicantCountry},</if>
+            <if test="Abstract != null">#{Abstract},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePatents" parameterType="Patents">
+        update patents
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ApplicationNumber != null and ApplicationNumber != ''">ApplicationNumber = #{ApplicationNumber},</if>
+            <if test="PublicationNumber != null and PublicationNumber != ''">PublicationNumber = #{PublicationNumber},</if>
+            <if test="ApplicationDate != null">ApplicationDate = #{ApplicationDate},</if>
+            <if test="PublicationDate != null">PublicationDate = #{PublicationDate},</if>
+            <if test="IPCClassification != null">IPCClassification = #{IPCClassification},</if>
+            <if test="Applicant != null">Applicant = #{Applicant},</if>
+            <if test="Inventor != null">Inventor = #{Inventor},</if>
+            <if test="InventionName != null">InventionName = #{InventionName},</if>
+            <if test="ApplicantPostalCode != null">ApplicantPostalCode = #{ApplicantPostalCode},</if>
+            <if test="Agent != null">Agent = #{Agent},</if>
+            <if test="Agency != null">Agency = #{Agency},</if>
+            <if test="DocumentType != null">DocumentType = #{DocumentType},</if>
+            <if test="ApplicantCountry != null">ApplicantCountry = #{ApplicantCountry},</if>
+            <if test="Abstract != null">Abstract = #{Abstract},</if>
+        </trim>
+        where patent_id = #{patentId}
+    </update>
+
+    <delete id="deletePatentsByPatentId" parameterType="Long">
+        delete from patents where patent_id = #{patentId}
+    </delete>
+
+    <delete id="deletePatentsByPatentIds" parameterType="String">
+        delete from patents where patent_id in
+        <foreach item="patentId" collection="array" open="(" separator="," close=")">
+            #{patentId}
+        </foreach>
+    </delete>
+</mapper>
