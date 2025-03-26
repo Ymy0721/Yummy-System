@@ -75,7 +75,7 @@ export default {
         // username: "yummytest",
         // password: "123456",
         // username: "admin",
-        // password: "YmY040522",
+        // password: "yummy0721",
         rememberMe: false,
         code: "",
         uuid: ""

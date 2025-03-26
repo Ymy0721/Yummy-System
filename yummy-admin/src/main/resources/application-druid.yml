@@ -48,7 +48,7 @@ spring:
                 url-pattern: /druid/*
                 # 控制台管理用户名和密码
                 login-username: admin
-                login-password: YmY040522
+                login-password: yummy0721
             filter:
                 stat:
                     enabled: true

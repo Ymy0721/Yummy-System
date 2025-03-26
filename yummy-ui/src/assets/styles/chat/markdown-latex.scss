@@ -1,0 +1,90 @@
+/* Markdown和LaTeX公式样式 */
+
+/* LaTeX公式通用样式 */
+.math {
+  &.block {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    text-align: center;
+    margin: 1em 0;
+    padding: 8px 0;
+    background-color: rgba(0,0,0,0.02);
+    border-radius: 4px;
+    
+    .katex-display {
+      margin: 0;
+    }
+  }
+  
+  &.inline {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 2px;
+    vertical-align: middle;
+    max-width: 100%;
+    overflow-x: auto;
+    
+    .katex {
+      max-width: 100%;
+    }
+  }
+  
+  &.math-error {
+    background-color: #fff0f0;
+    color: #e53935;
+    border: 1px dashed #e53935;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+  }
+}
+
+/* 用户气泡中的LaTeX样式 */
+.user-bubble .math {
+  &.block {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+    
+    .katex {
+      color: white;
+    }
+  }
+  
+  &.inline {
+    .katex {
+      color: white;
+    }
+  }
+  
+  &.math-error {
+    background-color: rgba(255,0,0,0.2);
+    color: white;
+    border-color: rgba(255,255,255,0.5);
+  }
+}
+
+/* KaTeX样式自定义 */
+.katex {
+  font-size: 1.1em;
+  line-height: 1.2;
+  
+  .katex-html {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 5px 0;
+  
+  &::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+  }
+}

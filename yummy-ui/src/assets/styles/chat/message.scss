@@ -1,0 +1,230 @@
+// 清除旧样式，防止冲突
+.message {
+  display: none !important;
+}
+
+.message-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 30px;
+  scroll-behavior: smooth;
+  background-color: #f5f5f5; // 更浅的背景色
+}
+
+// 欢迎屏幕样式
+.welcome-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #444;
+  padding: 20px;
+  text-align: center;
+  
+  .welcome-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  p {
+    color: #666;
+    max-width: 500px;
+  }
+}
+
+// 消息项主样式 - 简化版本避免重复和冲突
+.message-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  position: relative;
+  width: 100%;
+  
+  &.user {
+    flex-direction: row-reverse; /* 用户消息头像在右边 */
+  }
+  
+  .bubble {
+    position: relative;
+    padding: 12px 16px;
+    max-width: 70%;
+    min-width: 100px;
+    border-radius: 18px;
+    word-break: break-word;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    
+    &.user-bubble {
+      background-color: #1e88e5; /* 蓝色气泡 */
+      color: white;
+      border-top-right-radius: 4px; /* 右上角更小的圆角 */
+      
+      /* 编辑模式样式 */
+      &.editing {
+        background-color: white;
+        color: #333;
+        border: 1.5px solid #1e88e5;
+      }
+    }
+    
+    &.assistant-bubble {
+      background-color: white; /* 白色气泡 */
+      color: #333;
+      border-top-left-radius: 4px; /* 左上角更小的圆角 */
+    }
+    
+    // 消息操作按钮
+    .message-actions {
+      position: absolute;
+      display: flex;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      padding: 6px 10px;
+      z-index: 10;
+      bottom: -36px;
+      
+      &.ai-actions {
+        left: 0; /* AI消息按钮靠左 */
+      }
+      
+      &.user-actions {
+        right: 0; /* 用户消息按钮靠右 */
+      }
+      
+      i {
+        cursor: pointer;
+        font-size: 16px;
+        margin: 0 6px;
+        color: #606060;
+        
+        &:hover {
+          color: #1e88e5;
+        }
+      }
+    }
+  }
+  
+  /* 修改编辑模式样式，确保位置正确 */
+  .edit-mode {
+    width: 100%;
+    
+    .el-textarea__inner {
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+      padding: 0;
+      width: 100%;
+    }
+    
+    .edit-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+  }
+}
+
+// 正在生成消息的样式
+.streaming-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  
+  .avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    margin: 0 8px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  }
+  
+  .bubble {
+    background-color: white;
+    padding: 12px 16px;
+    border-radius: 18px;
+    border-top-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    max-width: 70%;
+    margin-left: 8px;
+    position: relative;
+  }
+  
+  .streaming-actions {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    
+    .el-button {
+      padding: 4px 8px;
+      font-size: 18px;
+      margin-left: 8px;
+      border: none;
+      background: transparent;
+      
+      &:hover {
+        color: #1e88e5;
+      }
+    }
+  }
+}
+
+// 加载提示样式
+.loading-dots {
+  display: flex;
+  align-items: center;
+  
+  span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    animation: dotPulse 1.4s infinite ease-in-out both;
+    
+    &:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+  }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 18px;
+  background-color: #333;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}

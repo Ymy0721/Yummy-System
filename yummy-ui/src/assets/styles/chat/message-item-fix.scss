@@ -1,0 +1,152 @@
+/* 消息项修复样式 - 强制覆盖样式 */
+
+/* 强制保持用户消息结构：头像在右侧，气泡在左侧 */
+.message-item.user {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+  
+  /* 头像强制放在右侧 */
+  .user-avatar {
+    order: 2 !important;
+    margin-left: 12px !important;
+    margin-right: 0 !important;
+  }
+  
+  /* 气泡强制放在左侧 */
+  .user-bubble, .editing {
+    order: 1 !important;
+    margin-right: 8px !important; /* 减少与头像的距离 */
+    margin-left: 0 !important;
+  }
+}
+
+/* 用户消息容器固定布局 */
+.message-item.user .user-message-container {
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;
+  min-height: 40px !important;
+  padding-right: 0px !important; /* 减少右侧padding，让气泡更靠近头像 */
+  
+  /* 用户头像固定在最右侧 */
+  .user-avatar {
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
+  }
+  
+  /* 气泡包装器 */
+  .bubble-wrapper {
+    width: 100% !important;
+    padding-right: 12px !important; /* 减少内边距，使气泡更靠近头像 */
+    box-sizing: border-box !important;
+    
+    /* 用户气泡靠右 */
+    .user-bubble {
+      float: right !important; /* 气泡靠右对齐 */
+      max-width: 80% !important; /* 增加最大宽度 */
+      margin: 0 !important;
+      text-align: left !important;
+    }
+  }
+}
+
+/* 强制保持AI消息结构：头像在左侧，气泡在右侧 */
+.message-item.assistant {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  
+  /* 头像强制放在左侧 */
+  .assistant-avatar {
+    order: 1 !important;
+    margin-right: 12px !important;
+    margin-left: 0 !important;
+  }
+  
+  /* 气泡强制放在右侧 */
+  .assistant-bubble {
+    order: 2 !important;
+    margin-left: 8px !important; /* 减少左侧边距 */
+    margin-right: 0 !important;
+  }
+}
+
+/* 强制修复所有状态下的头像大小 */
+.message-item .avatar,
+.message-item.assistant .avatar,
+.message-item.assistant .assistant-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  flex-shrink: 0 !important;
+  
+  img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* 使思考中状态下的气泡与头像距离一致 */
+.message-item.assistant .assistant-bubble {
+  margin-left: 8px !important;
+}
+
+/* 强制显示操作按钮 */
+.message-actions {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 强制修正按钮位置 */
+.ai-actions {
+  left: 0 !important;
+  right: auto !important;
+}
+
+.user-actions {
+  right: 0 !important;
+  left: auto !important;
+}
+
+/* 编辑模式样式覆盖 */
+.user-bubble.editing {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #1e88e5 !important; /* 减小边框宽度 */
+  
+  .edit-mode {
+    padding: 0 !important;
+    
+    .el-textarea__inner {
+      border: none !important;
+      box-shadow: none !important;
+      background-color: transparent !important;
+      padding: 0 !important;
+      line-height: 1.4 !important; /* 保持一致的行高 */
+    }
+    
+    .edit-actions {
+      margin-top: 8px !important; 
+      gap: 8px !important;
+    }
+  }
+}
+
+/* 清除所有可能影响布局的浮动 */
+.message-item:after {
+  content: "" !important;
+  display: table !important;
+  clear: both !important;
+}
+
+/* 调整气泡内边距，减少单行文本的空间 */
+.message-item .bubble {
+  padding: 8px 12px !important; /* 减小内边距 */
+  line-height: 1.4 !important; /* 设置合理的行高 */
+}

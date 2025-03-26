@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yummy.patentSys.mapper.ChatMapper">
+    
+    <!-- 聊天会话结果映射 -->
+    <resultMap type="com.yummy.patentSys.domain.ChatSession" id="ChatSessionResult">
+        <id     property="id"           column="id"              />
+        <result property="userId"       column="user_id"         />
+        <result property="title"        column="title"           />
+        <result property="createTime"   column="create_time"     />
+        <result property="updateTime"   column="update_time"     />
+    </resultMap>
+    
+    <!-- 聊天消息结果映射 -->
+    <resultMap type="com.yummy.patentSys.domain.ChatMessage" id="ChatMessageResult">
+        <id     property="id"           column="id"              />
+        <result property="chatId"       column="chat_id"         />
+        <result property="userId"       column="user_id"         />
+        <result property="role"         column="role"            />
+        <result property="content"      column="content"         />
+        <result property="createTime"   column="create_time"     />
+    </resultMap>
+    
+    <!-- 查询用户的聊天会话列表 -->
+    <select id="selectChatSessionsByUserId" parameterType="Long" resultMap="ChatSessionResult">
+        select id, user_id, title, create_time, update_time
+        from chat_session
+        where user_id = #{userId}
+        order by update_time desc
+    </select>
+    
+    <!-- 根据ID查询聊天会话 -->
+    <select id="selectChatSessionById" parameterType="Long" resultMap="ChatSessionResult">
+        select id, user_id, title, create_time, update_time
+        from chat_session
+        where id = #{chatId}
+    </select>
+    
+    <!-- 新增聊天会话 -->
+    <insert id="insertChatSession" parameterType="com.yummy.patentSys.domain.ChatSession" useGeneratedKeys="true" keyProperty="id">
+        insert into chat_session (
+            user_id,
+            title,
+            create_time,
+            update_time
+        ) values (
+            #{userId},
+            #{title},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+    
+    <!-- 更新聊天会话 -->
+    <update id="updateChatSession" parameterType="com.yummy.patentSys.domain.ChatSession">
+        update chat_session
+        <set>
+            <if test="title != null">title = #{title},</if>
+            update_time = #{updateTime}
+        </set>
+        where id = #{id}
+    </update>
+    
+    <!-- 删除聊天会话 -->
+    <delete id="deleteChatSessionById" parameterType="Long">
+        delete from chat_session where id = #{chatId}
+    </delete>
+    
+    <!-- 查询会话的所有消息 -->
+    <select id="selectChatMessagesByChatId" parameterType="Long" resultMap="ChatMessageResult">
+        select id, chat_id, user_id, role, content, create_time
+        from chat_message
+        where chat_id = #{chatId}
+        order by create_time asc
+    </select>
+    
+    <!-- 查询会话的最近消息（用于上下文） -->
+    <select id="selectRecentChatMessages" resultMap="ChatMessageResult">
+        select id, chat_id, user_id, role, content, create_time
+        from chat_message
+        where chat_id = #{chatId}
+        order by create_time desc
+        limit #{limit}
+    </select>
+    
+    <!-- 新增聊天消息 -->
+    <insert id="insertChatMessage" parameterType="com.yummy.patentSys.domain.ChatMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into chat_message (
+            chat_id,
+            user_id,
+            role,
+            content,
+            create_time
+        ) values (
+            #{chatId},
+            #{userId},
+            #{role},
+            #{content},
+            #{createTime}
+        )
+    </insert>
+    
+    <!-- 删除会话相关的所有消息 -->
+    <delete id="deleteChatMessagesByChatId" parameterType="Long">
+        delete from chat_message where chat_id = #{chatId}
+    </delete>
+</mapper>

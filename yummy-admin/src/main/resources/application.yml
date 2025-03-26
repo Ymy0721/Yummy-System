@@ -127,3 +127,26 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+# AI配置
+ai:
+  # 默认将不再从这里读取配置，而是从数据库读取
+  # 仅作为初始配置参考
+  openai:
+    api-key: your-api-key-here
+    api-url: https://openai.com/v1/chat/completions
+  model: GPT-3
+
+# 文件上传配置
+file:
+  upload:
+    # 使用绝对路径
+    path: ${user.home}/yummy-uploads
+    maxSize: 10MB
+    allowedTypes: pdf,doc,docx,xls,xlsx,ppt,pptx,txt
+
+# 搜索API配置
+search:
+  api:
+    key: your-bing-api-key-here
+    endpoint: https://api.bing.microsoft.com/v7.0/search

@@ -1,0 +1,25 @@
+@import './sidebar.scss';
+@import './message.scss';
+@import './input.scss';
+@import './highlight-override.scss';
+@import './message-item-fix.scss'; 
+@import './markdown-latex.scss'; // 添加LaTeX样式支持
+
+.chat-container {
+  display: flex;
+  height: calc(100vh - 84px);
+  background-color: #f5f5f5;
+  position: relative;
+}
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes blink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}

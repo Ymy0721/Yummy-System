@@ -43,7 +43,14 @@ export function getInfo() {
 export function logout() {
   return request({
     url: '/logout',
-    method: 'post'
+    method: 'post',
+    // 增加超时时间，防止请求长时间挂起
+    timeout: 10000,
+    // 增加错误处理选项
+    validateStatus: status => {
+      // 任何状态码都视为成功，我们会在catch中处理错误
+      return true;
+    }
   })
 }
 

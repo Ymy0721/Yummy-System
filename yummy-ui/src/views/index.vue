@@ -155,7 +155,8 @@ export default {
       selectedN: 10,
       selectedM: 10,
       selectedP: 10,
-      selectedK: 30
+      selectedK: 30,
+      loading: false // 添加 loading 属性
     };
   },
   watch: {
@@ -373,9 +374,17 @@ export default {
       });
     },
     showPieCountByAgency() {
+      this.loading = true; // 开始加载
       getPatentCountByAgency().then(response => {
         let data = response.data.slice(0, this.selectedN);
-        let myChart = this.$echarts.init(document.getElementById('pieCountByAgency'));
+        // 确保DOM元素存在
+        let chartElement = document.getElementById('pieCountByAgency');
+        if (!chartElement) {
+          console.warn('无法找到图表容器: pieCountByAgency');
+          this.loading = false;
+          return;
+        }
+        let myChart = this.$echarts.init(chartElement);
         let option = {
           title: {
             text: '代理机构专利数量统计',
@@ -413,8 +422,10 @@ export default {
           ]
         };
         myChart.setOption(option);
+        this.loading = false; // 加载完成
       }).catch(error => {
         console.error("Error fetching patent count by agency:", error);
+        this.loading = false; // 出错也要关闭加载
       });
     },
     showBarCountByApplicant() {

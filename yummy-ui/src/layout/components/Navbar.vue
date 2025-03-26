@@ -101,9 +101,19 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('LogOut').then(() => {
-          location.href = '/index';
-        })
+        this.$store.dispatch('LogOut')
+          .then(() => {
+            // 使用路由跳转替代直接修改location.href
+            this.$router.push('/login');
+          })
+          .catch(error => {
+            console.error('登出失败:', error);
+            this.$message.error('登出失败，请稍后再试');
+            // 即使登出API失败，也强制清除本地存储并重定向到登录页
+            this.$store.commit('SET_TOKEN', '');
+            this.$store.commit('SET_ROLES', []);
+            this.$router.push('/login');
+          });
       }).catch(() => {});
     }
   }

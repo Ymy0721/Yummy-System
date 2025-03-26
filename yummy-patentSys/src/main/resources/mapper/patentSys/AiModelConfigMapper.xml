@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yummy.patentSys.mapper.AiModelConfigMapper">
+    
+    <resultMap type="com.yummy.patentSys.domain.AiModelConfig" id="AiModelConfigResult">
+        <id     property="id"           column="id"            />
+        <result property="name"         column="name"          />
+        <result property="model"        column="model"         />
+        <result property="baseUrl"      column="base_url"      />
+        <result property="apiKey"       column="api_key"       />
+        <result property="maxTokens"    column="max_tokens"    />
+        <result property="temperature"  column="temperature"   />
+        <result property="isDefault"    column="is_default"    />
+        <result property="status"       column="status"        />
+        <result property="remark"       column="remark"        />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+    </resultMap>
+
+    <sql id="selectAiModelConfigVo">
+        select id, name, model, base_url, api_key, max_tokens, temperature, is_default, status, remark, create_by, create_time, update_by, update_time
+        from ai_model_config
+    </sql>
+
+    <select id="selectAiModelConfigList" parameterType="com.yummy.patentSys.domain.AiModelConfig" resultMap="AiModelConfigResult">
+        <include refid="selectAiModelConfigVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="model != null  and model != ''"> and model like concat('%', #{model}, '%')</if>
+            <if test="isDefault != null  and isDefault != ''"> and is_default = #{isDefault}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by is_default desc, create_time desc
+    </select>
+    
+    <select id="selectAiModelConfigById" parameterType="Long" resultMap="AiModelConfigResult">
+        <include refid="selectAiModelConfigVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectDefaultAiModelConfig" resultMap="AiModelConfigResult">
+        <include refid="selectAiModelConfigVo"/>
+        where is_default = '1' and status = '0'
+        limit 1
+    </select>
+        
+    <insert id="insertAiModelConfig" parameterType="com.yummy.patentSys.domain.AiModelConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into ai_model_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="model != null">model,</if>
+            <if test="baseUrl != null">base_url,</if>
+            <if test="apiKey != null">api_key,</if>
+            <if test="maxTokens != null">max_tokens,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="model != null">#{model},</if>
+            <if test="baseUrl != null">#{baseUrl},</if>
+            <if test="apiKey != null">#{apiKey},</if>
+            <if test="maxTokens != null">#{maxTokens},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiModelConfig" parameterType="com.yummy.patentSys.domain.AiModelConfig">
+        update ai_model_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="baseUrl != null">base_url = #{baseUrl},</if>
+            <if test="apiKey != null">api_key = #{apiKey},</if>
+            <if test="maxTokens != null">max_tokens = #{maxTokens},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="clearDefaultFlag">
+        update ai_model_config set is_default = '0'
+    </update>
+
+    <delete id="deleteAiModelConfigById" parameterType="Long">
+        delete from ai_model_config where id = #{id}
+    </delete>
+
+    <delete id="deleteAiModelConfigByIds" parameterType="String">
+        delete from ai_model_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

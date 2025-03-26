@@ -1,0 +1,119 @@
+/* 侧边栏样式 */
+.sidebar {
+  width: 230px; // 从260px减小到230px
+  background-color: #e6e6e6; /* 背景色加深一点，但不太深 */
+  color: #333; /* 文字颜色改为深色以适应浅色背景 */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+  
+  &.collapsed {
+    width: 24px;
+    
+    .toggle-sidebar {
+      width: 24px;
+      border-radius: 0;
+    }
+  }
+  
+  .toggle-sidebar {
+    position: absolute;
+    right: 0;
+    top: 20px;
+    background-color: #c8c8c8; /* 按钮背景也稍微加深 */
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px 0 0 4px;
+    z-index: 10;
+    
+    &:hover {
+      background-color: #b0b0b0;
+    }
+  }
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.new-chat {
+  padding: 12px;
+  border: 1px solid #1e88e5; /* 蓝色边框 */
+  margin: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #1e88e5; /* 蓝色文字 */
+  
+  &:hover {
+    background-color: #e0e0e0; /* 保持原有的悬停效果 */
+  }
+  
+  i {
+    margin-right: 8px;
+  }
+}
+
+.model-selector {
+  padding: 0 15px 15px;
+  
+  .el-select {
+    width: 100%;
+  }
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 15px;
+}
+
+.history-item {
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  
+  &:hover, &.active {
+    background-color: #d0d0d0; /* 高亮色也稍微加深 */
+  }
+  
+  .title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .actions {
+    display: none;
+  }
+  
+  &:hover .actions {
+    display: flex;
+  }
+  
+  .actions i {
+    margin-left: 8px;
+    cursor: pointer;
+    
+    &:hover {
+      color: #333; /* 深色图标悬停效果 */
+    }
+  }
+}

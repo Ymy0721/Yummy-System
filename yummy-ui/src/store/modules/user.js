@@ -82,7 +82,13 @@ const user = {
           removeToken()
           resolve()
         }).catch(error => {
-          reject(error)
+          console.log('登出失败:', error)
+          // 即使API调用失败，也清除本地token和权限
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          commit('SET_PERMISSIONS', [])
+          removeToken()
+          resolve() // 依然resolve而不是reject，确保UI流程能继续
         })
       })
     },

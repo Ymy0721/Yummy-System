@@ -1,0 +1,74 @@
+/* 代码高亮样式覆盖 - 深色主题 */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 16px;
+  color: #abb2bf !important;
+  background: #282c34 !important;
+}
+
+/* 关键字 */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+  color: #c678dd !important; /* 紫色关键字 */
+}
+
+/* 字符串 */
+.hljs-string,
+.hljs-attr,
+.hljs-template-tag {
+  color: #98c379 !important; /* 绿色字符串 */
+}
+
+/* 数字 */
+.hljs-literal,
+.hljs-number,
+.hljs-type,
+.hljs-params {
+  color: #d19a66 !important; /* 橙色数字 */
+}
+
+/* 注释 */
+.hljs-comment {
+  color: #5c6370 !important; /* 灰色注释 */
+}
+
+/* 函数 */
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-selector-id,
+.hljs-class .hljs-title {
+  color: #61afef !important; /* 蓝色函数 */
+}
+
+/* 变量 */
+.hljs-variable,
+.hljs-attr {
+  color: #e06c75 !important; /* 红色变量 */
+}
+
+/* 标点符号 */
+.hljs-punctuation,
+.hljs-subst {
+  color: #24292e !important;
+}
+
+/* 标签 */
+.hljs-tag {
+  color: #e06c75 !important; /* 红色标签 */
+}
+
+/* 属性名 */
+.hljs-name {
+  color: #e06c75 !important; /* 红色属性名 */
+}
+
+/* 属性值 */
+.hljs-value {
+  color: #98c379 !important; /* 绿色属性值 */
+}
