@@ -9,7 +9,7 @@ export default {
   name: 'YummyDoc',
   data() {
     return {
-      url: 'https://github.com/Ymy0721/Patent-Search-System/blob/main/README.md'
+      url: 'https://github.com/Ymy0721/Yummy-System/blob/main/README.md'
     }
   },
   methods: {

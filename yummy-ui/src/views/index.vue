@@ -16,7 +16,7 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://github.com/Ymy0721/Patent-Search-System')"
+            @click="goTarget('https://github.com/Ymy0721/Yummy-System')"
             >访问github</el-button
           >
           <el-button

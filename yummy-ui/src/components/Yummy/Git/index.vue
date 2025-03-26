@@ -9,7 +9,7 @@ export default {
   name: 'YummyGit',
   data() {
     return {
-      url: 'https://github.com/Ymy0721/Patent-Search-System'
+      url: 'https://github.com/Ymy0721/Yummy-System'
     }
   },
   methods: {
