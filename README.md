@@ -99,18 +99,19 @@ server {
     listen 80;
     server_name 127.0.0.1; # 使用公网IP或域名
 
-    # 前端静态文件配置
-    root /var/www/yummy-ui;
-    index index.html;
+    
 
     # 处理前端路由（Vue React等history模式）
     location / {
+        # 前端静态文件配置
+        root /var/www/yummy-ui;
+        index index.html;
         try_files $uri $uri/ /index.html;
     }
 
     # 反向代理后端接口
     location /prod-api/ { # 根据实际接口路径调整
-        proxy_pass http://127.0.0.1:8080/;
+        proxy_pass http://localhost:8080/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
