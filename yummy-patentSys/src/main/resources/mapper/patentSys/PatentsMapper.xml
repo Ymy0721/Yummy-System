@@ -73,7 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from patents
         where Agency != ''
         group by name
-        order by value desc;
+        order by value desc
+        limit 50;
     </select>
 
     <select id="getPatentCountByApplicant" resultType="com.yummy.patentSys.stat.BusinessStat">
@@ -81,7 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from patents
         where Applicant != ''
         group by name
-        order by value desc;
+        order by value desc
+        limit 50;
     </select>
 
     <select id="getPatentCountByInventor" resultType="com.yummy.patentSys.stat.BusinessStat">
@@ -89,7 +91,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from patents
         where Inventor not in ('', '不公告发明人', '请求不公布姓名')
         group by name
-        order by value desc;
+        order by value desc
+        limit 50;
     </select>
 
     <select id="getPatentCountByType" resultType="com.yummy.patentSys.stat.BusinessStat">
@@ -105,7 +108,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from word_frequency
         where type = 'InventionName'
         group by  name, value
-        order by value desc;
+        order by value desc
+        limit 500;
     </select>
 
 
@@ -121,6 +125,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             GROUP BY from_id
             HAVING COUNT(relation_id) BETWEEN 10 AND 20
             ORDER BY COUNT(relation_id) DESC
+            LIMIT 100;
         );
     </select>
 
