@@ -125,24 +125,25 @@ export default {
 <style scoped>
 .file-uploader {
   display: inline-block;
-  
-  .el-button {
-    color: #606266;
-    
-    &:hover {
-      color: #409EFF;
-    }
-  }
-  
-  .upload-button {
-    font-size: 22px; /* 增大图标尺寸 */
-    padding: 8px;
-    
-    i {
-      font-size: 22px; /* 确保图标本身也变大 */
-    }
-  }
 }
+
+.file-uploader .el-button {
+  color: #606266;
+}
+
+.file-uploader .el-button:hover {
+  color: #409EFF;
+}
+
+.file-uploader .upload-button {
+  font-size: 22px; /* 增大图标尺寸 */
+  padding: 8px;
+}
+
+.file-uploader .upload-button i {
+  font-size: 22px; /* 确保图标本身也变大 */
+}
+
 .file-preview {
   margin-top: 8px;
   display: flex;
@@ -153,24 +154,29 @@ export default {
   border-radius: 4px;
   max-width: 300px;
 }
+
 .file-info {
   display: flex;
   align-items: center;
   overflow: hidden;
 }
+
 .file-name {
   margin: 0 5px;
   color: #606266;
   font-size: 12px;
 }
+
 .file-size {
   color: #909399;
   font-size: 12px;
 }
+
 .remove-file {
   cursor: pointer;
   color: #909399;
 }
+
 .remove-file:hover {
   color: #f56c6c;
 }

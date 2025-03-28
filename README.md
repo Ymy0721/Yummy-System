@@ -61,7 +61,7 @@ After=syslog.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/Yummy-System/yummy-admin/target
+WorkingDirectory=/app/Yummy-System/
 ExecStart=/usr/bin/java -jar yummy-admin.jar --spring.profiles.active=druid
 SuccessExitStatus=143
 Restart=always
@@ -86,7 +86,7 @@ sudo apt install -y nginx
 
 # 创建前端文件目录
 sudo mkdir -p /var/www/yummy-ui
-sudo cp -r /home/ubuntu/Yummy-System/yummy-ui/dist/* /var/www/yummy-ui/
+sudo cp -r /app/Yummy-System/yummy-ui/dist/* /var/www/yummy-ui/
 
 # 设置权限
 sudo chown -R www-data:www-data /var/www/yummy-ui
@@ -97,7 +97,7 @@ sudo vim /etc/nginx/sites-available/yummy-system
 # 输入以下配置（关键配置说明）：
 server {
     listen 80;
-    server_name 127.0.0.1; # 使用公网IP或域名
+    server_name your-domain.com; # 使用公网IP或域名
 
     
 
@@ -112,6 +112,7 @@ server {
     # 反向代理后端接口
     location /prod-api/ { # 根据实际接口路径调整
         proxy_pass http://localhost:8080/;
+        rewrite ^/prod-api/(.*)$ /$1 break;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -147,7 +148,7 @@ sudo ufw status
 #### 6. 验证部署
 1. **后端验证**：
    ```bash
-   curl http://localhost:8080
+   curl http://localhost:8080/prod-api
    # 应返回后端健康检查信息
    ```
 
@@ -155,7 +156,7 @@ sudo ufw status
    浏览器访问 `http://localhost` 应显示前端页面
 
 3. **接口验证**：
-   浏览器访问 `http://localhost/prod-api/xxx` 应能访问到后端接口
+   浏览器访问 `http://localhost/prod-api` 应能访问到后端接口
 
 #### 7. 高级配置（可选）
 **HTTPS配置**：
@@ -185,7 +186,7 @@ tail -f /var/log/nginx/error.log
 
 #### 部署架构示意图：
 ```
-公网用户 -> xxx.xxx.xxx.xxx:80 (Nginx)
+公网用户 -> your-domain.com:80 (Nginx)
 ├── 静态文件请求 -> /var/www/yummy-ui
-└── /prod-api/请求 -> 反向代理到127.0.0.1:8080 (Spring Boot)
+└── /prod-api/请求 -> 反向代理到localhost:8080 (Spring Boot)
 ```

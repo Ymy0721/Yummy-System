@@ -15,6 +15,7 @@ yummy:
 
 # 开发环境配置
 server:
+  address: 0.0.0.0
   # 服务器的HTTP端口，默认为8080
   port: 8080
   servlet:

@@ -6,9 +6,9 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://localhost:3306/vue_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                url: jdbc:mysql://39.106.158.169:3306/vue_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
-                password: 123456
+                password: YmY040522
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
@@ -48,7 +48,7 @@ spring:
                 url-pattern: /druid/*
                 # 控制台管理用户名和密码
                 login-username: admin
-                login-password: yummy0721
+                login-password: YmY040522
             filter:
                 stat:
                     enabled: true
