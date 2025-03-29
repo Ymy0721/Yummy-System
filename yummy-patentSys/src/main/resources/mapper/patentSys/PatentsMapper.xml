@@ -107,26 +107,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select word as name, frequency as value
         from word_frequency
         where type = 'InventionName'
-        group by  name, value
         order by value desc
-        limit 500;
+        limit 300;
     </select>
 
 
     <select id="getEntitiesWithRelationship" resultType="com.yummy.patentSys.stat.EntityRelationship">
-        SELECT e1.name AS entity1, e1.type AS entity1Type, r.relation, e2.name AS entity2, e2.type AS entity2Type,
-               (SELECT COUNT(*) FROM relations WHERE from_id = e1.entity_id) AS degree
-        FROM entities e1
-                 JOIN relations r ON e1.entity_id = r.from_id
-                 JOIN entities e2 ON r.to_id = e2.entity_id
-        WHERE e1.entity_id IN (
-            SELECT from_id
+        WITH top_entities AS (
+            SELECT from_id, COUNT(*) as relation_count
             FROM relations
             GROUP BY from_id
-            HAVING COUNT(relation_id) BETWEEN 10 AND 20
-            ORDER BY COUNT(relation_id) DESC
-            LIMIT 100;
-        );
+            HAVING COUNT(*) BETWEEN 10 AND 20
+            ORDER BY COUNT(*) DESC
+            LIMIT 100
+        )
+        SELECT 
+            e1.name AS entity1, 
+            e1.type AS entity1Type, 
+            r.relation, 
+            e2.name AS entity2, 
+            e2.type AS entity2Type,
+            te.relation_count AS degree
+        FROM top_entities te
+        JOIN entities e1 ON e1.entity_id = te.from_id
+        JOIN relations r ON e1.entity_id = r.from_id
+        JOIN entities e2 ON r.to_id = e2.entity_id;
     </select>
 
     <insert id="insertPatents" parameterType="Patents" useGeneratedKeys="true" keyProperty="patentId">
